@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="default" namespace="/" extends="struts-default">
+		<!-- 配置默认的行为 -->
+		<default-action-ref name="defaultAction"></default-action-ref>
+		<!-- 配置默认action -->
+		<action name="defaultAction">
+			<result>/error.jsp</result>
+		</action>
+	</package>
+
+	<!-- 拦截器配置 -->
+	<package name="intercepter" namespace="/" extends="struts-default">
+		<!-- interceptors元素中使用interceptor子元素定义拦截器 -->
+		<interceptors>
+			<!--  interceptor元素name属性：拦截器的名称，class：自定义拦截器类的全限定类名-->
+			<interceptor name="myTime" class="cn.test.interceptor.MyTimeIntercepter"></interceptor>
+			<interceptor-stack name="myTimeStack">
+				<interceptor-ref name="myTime"></interceptor-ref>   <!-- 把自定义的拦截器设置为栈的顶部 -->
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<!--浏览器输入http://localhost:8080/strutsstu4/index并访问，会触发拦截器的执行，计算拦截器执行的时间-->
+		<action name="index">
+			<result >/index1.jsp</result>
+			<interceptor-ref name="myTimeStack"></interceptor-ref>  <!-- 让myTimeStack这个拦截器栈去进行拦截 -->
+		</action>
+	</package>
+
+</struts>
