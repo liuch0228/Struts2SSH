@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	
+	<package name="intercepter" namespace="/" extends="struts-default">
+		<!-- 声明拦截器 -->
+		<interceptors>
+			<interceptor name="privilege" class="cn.test.interceptor.PrivilegeInterceptor"></interceptor>
+			<!-- 自定义拦截器栈，放入自定义的拦截器和struts的默认拦截器 -->
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="privilege"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 默认的 Action配置要放在拦截器配置的后面 -->
+		<default-action-ref name="defaultAction"></default-action-ref>
+		
+		<!-- 用户登陆操作   action里面不写方法名，默认之心execute()方法！！！-->
+		<action name="login" class="cn.test.action.LoginActoin" >
+			<result>/main.jsp</result>
+			<result name="input">/login.jsp</result>
+		</action>
+		<!-- book操作action -->
+		<action name="book_*" class="cn.test.action.BookAction" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="login">/login.jsp</result>
+			<!-- 在action中使用自定义拦截器，对book操作的actoin进行权限控制 
+			放在哪个action，就对那个action进行权限控制的拦截-->
+			<interceptor-ref name="myStack"></interceptor-ref>
+		</action>
+		
+		<!-- 注意，package元素里面的子元素是有顺序要求的，如果写错位置，启动时会报错，一般把action写在最后面 -->
+		<action name="defaultAction">
+			<result>/error.jsp</result>
+		</action>
+	</package>
+
+</struts>
