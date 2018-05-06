@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 开启动态调用，并且设置启用开发者模式 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+	<constant name="struts.devMode" value="true"></constant>
+
+	<!-- 配置默认的action,当请求一个不存在的Action,将跳转到error.jsp页面-->
+	<package name="default" namespace="/user" extends="struts-default">
+		<default-action-ref name="defaultAction"></default-action-ref>
+		<action name="defaultAction">
+			<result>/error.jsp</result>
+		</action>
+	</package>
+
+	<package name="user" namespace="/user" extends="struts-default">
+		<action name="userLogin" class="cn.test.action.UserLoginAction">
+			<result name="success">/loginSuccess.jsp</result>
+			<result name="error">/loginError.jsp</result>
+		</action>
+	</package>
+</struts>
